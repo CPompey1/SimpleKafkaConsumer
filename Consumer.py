@@ -22,12 +22,12 @@ def main():
         value_deserializer=lambda m: m.decode('utf-8')  # Convert byte to string
     )
 
-    print(f"🌐 Connected to Kafka broker at {KAFKA_BROKER}")
-    print(f"🔍 Listening for messages on topic '{TOPIC_NAME}'...")
+    print(f"Connected to Kafka broker at {KAFKA_BROKER}")
+    print(f"Listening for messages on topic '{TOPIC_NAME}'...")
 
     # --- Message Consumption Loop ---
     for message in consumer:
-        print(f"📥 Received Message: {message.value}")
+        print(f"Received Message: {message.value}")
         result = subprocess.run(
             ['bash', '-c', commands_map.get(message.value, "echo Command not found")],
             check=True,
