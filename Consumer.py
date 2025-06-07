@@ -9,7 +9,7 @@ def main():
    
 
     # --- Configuration ---
-    KAFKA_BROKER = 'your.public.ip.or.domain:9092'  # Replace with public IP or domain
+    KAFKA_BROKER = 'localhost:9092'  # Replace with public IP or domain
     TOPIC_NAME = 'commands'                      # Replace with your Kafka topic
 
     # --- Kafka Consumer Setup ---
@@ -27,15 +27,19 @@ def main():
 
     # --- Message Consumption Loop ---
     for message in consumer:
-        print(f"📥 Received Command: {message.value}")
+        print(f"📥 Received Message: {message.value}")
         result = subprocess.run(
-            [commands_map.get(message.value, "echo 'Command not found'")],
+            ['bash', '-c', commands_map.get(message.value, "echo Command not found")],
             check=True,
             capture_output=True,
             text=True
         )
+        print(f"Command Output: {result.stdout}")
+        if result.stderr:
+            print(f"Command Error: {result.stderr.strip()}")
+    print("Listening for commands... Press Ctrl+C to exit.")
 
-    print("✅ Exiting consumer.")
+    print("Exiting consumer.")
     consumer.close()
 
 
